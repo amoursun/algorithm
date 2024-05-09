@@ -43,15 +43,16 @@ class EventEmitter {
 
 // test
 const emitter = new EventEmitter();
-emitter.on('refresh', () => {
-	console.log('调用刷新最新数据')
-});
-emitter.emit('refresh');
+emitter
+    .on('refresh', () => {
+        console.log('调用刷新最新数据')
+    })
+    .emit('refresh')
+    .on('refresh', (pageNum, pageSize) => {
+        console.log(`参数为: {pageNo: ${pageNum}, pageSize: ${pageSize}}`)
+    })
+    .emit('refresh', 1, 10);
 
-emitter.on('refresh', (pageNum, pageSize) => {
-    console.log(`参数为: {pageNo: ${pageNum}, pageSize: ${pageSize}}`)
-});
-emitter.emit('refresh', 1, 10);
 console.log(emitter);
 emitter.offAll('refresh');
 console.log(emitter);
