@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数字增长动画</title>
+</head>
+<body>
+    <div id="number"></div>
+    <script>
+        /**
+         * 数字增长动画
+         * @param {number} start 起始值
+         * @param {number} end 结束值
+         * @param {number} duration 动画时长
+         * @param {Function} callback 动画结束后的回调函数
+         */
+        const numberAnimation = (options) => {
+            const {
+                start,
+                end,
+                duration,
+                callback,
+            } = options;
+            // 实现动画效果的代码
+            let current = start;
+            // 速度 = (结束值 - 起始值) / 时长
+            const speed = (end - start) / duration;
+            const startTime = Date.now();
+            const run = () => {
+                // 计算时间差
+                const diff = Date.now() - startTime;
+                // 判断是否结束: 时间差 >= 动画时长
+                if (diff >= duration) {
+                    current = end;
+                    if (callback) callback(current);
+                    return;
+                }
+                // 当前值 = 起始值 + 速度 * 时间差
+                current = start + speed * diff;
+                callback && callback(current);
+                // 继续执行
+                requestAnimationFrame(run);
+            };
+            run();
+        };
+        
+        const $number = document.getElementById('number');
+        numberAnimation({
+            start: 0,
+            end: 3782931.889,
+            duration: 3000,
+            callback: (current) => {
+                console.log('当前值: ', current);
+                // 更新 DOM
+                $number.textContent = current.toFixed(2);
+            },
+        });
+    </script>
+</body>
+</html>
